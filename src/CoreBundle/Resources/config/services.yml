@@ -63,3 +63,45 @@ services:
             - "@tournament.manager"
         tags:
             - { name: request.param_converter, converter:attribute priority: 10 }
+
+#----- CLUB ------------------------------------------------------------------------------------------------#
+
+    club.repository:
+        class: AppBundle\Business\Repository\ClubRepository
+        factory: ["@doctrine.orm.default_entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Club
+
+    club.manager:
+        class: AppBundle\Business\Manager\ClubManager
+        arguments:
+            repository: "@club.repository"
+            fSerializer: "@f_serializer"
+
+    club.adapter:
+        class: AppBundle\Adapter\Club\ClubAdapter
+        arguments:
+            - "@club.manager"
+        tags:
+            - { name: request.param_converter, converter:attribute priority: 10 }
+
+#----- PARTICIPANT ------------------------------------------------------------------------------------------------#
+
+    participant.repository:
+        class: AppBundle\Business\Repository\ParticipantRepository
+        factory: ["@doctrine.orm.default_entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Participant
+
+    club.manager:
+        class: AppBundle\Business\Manager\ParticipantManager
+        arguments:
+            repository: "@participant.repository"
+            fSerializer: "@f_serializer"
+
+    club.adapter:
+        class: AppBundle\Adapter\Participant\ParticipantAdapter
+        arguments:
+            - "@participant.manager"
+        tags:
+            - { name: request.param_converter, converter:attribute priority: 10 }
