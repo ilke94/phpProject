@@ -9,6 +9,7 @@ use AppBundle\Business\Manager\PlayerManager;
 
 class PlayerAdapter extends BaseAdapter
 {
+    protected $playerManager;
     /**
      * @param PlayerManager $playerManager
      */

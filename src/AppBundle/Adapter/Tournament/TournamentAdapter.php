@@ -15,12 +15,13 @@ use AppBundle\Business\Manager\TournamentManager;
 
 class TournamentAdapter extends BaseAdapter
 {
+    protected $tournamentManager;
     /**
-     * @param TournamentManager $playerManager
+     * @param TournamentManager $tournamentManager
      */
-    public function __construct(TournamentManager $playerManager)
+    public function __construct(TournamentManager $tournamentManager)
     {
-        $this->playerManager = $playerManager;
+        $this->tournamentManager = $tournamentManager;
     }
     /**
      * @param string  $param
@@ -30,6 +31,6 @@ class TournamentAdapter extends BaseAdapter
     public function buildConverterInstance($param, Request $request)
     {
         $type = __NAMESPACE__."\\".ucfirst($param).TournamentAdapterUtil::BASE_CONVERTER_NAME;
-        return new $type($this->playerManager, $request, $param);
+        return new $type($this->tournamentManager, $request, $param);
     }
 }
