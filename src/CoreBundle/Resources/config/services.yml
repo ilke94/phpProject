@@ -1,0 +1,65 @@
+services:
+    f_serializer:
+        class: FSerializerBundle\services\FJsonApiSerializer
+        arguments: [ "@doctrine.orm.entity_manager" ]
+
+    api.codes.dumper:
+        class: CoreBundle\Dumper\ApiCodeDumper
+        arguments: ["@templating.engine.twig", "@filesystem"]
+
+
+#----- FOOTBALL PLAYER ------------------------------------------------------------------------------------------------#
+
+    player.repository:
+        class: AppBundle\Business\Repository\PlayerRepository
+        factory: ["@doctrine.orm.default_entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Player
+
+    player.manager:
+        class: AppBundle\Business\Manager\PlayerManager
+        arguments:
+            repository: "@player.repository"
+            fSerializer: "@f_serializer"
+
+    player.adapter:
+        class: AppBundle\Adapter\Player\PlayerAdapter
+        arguments:
+            - "@player.manager"
+        tags:
+            - { name: request.param_converter, converter:attribute priority: 10 }
+
+
+#----- APPLICATION USER ------------------------------------------------------------------------------------------------#
+
+    user.repository:
+        class: AppBundle\Business\Repository\UserRepository
+        factory: ["@doctrine.orm.default_entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\User
+
+    user.provider:
+        class: AppBundle\Business\Provider\UserProvider
+        arguments:
+            - "@user.repository"
+
+#----- TOURNAMENT ------------------------------------------------------------------------------------------------#
+
+    tournament.repository:
+        class: AppBundle\Business\Repository\TournamentRepository
+        factory: ["@doctrine.orm.default_entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Tournament
+
+    tournament.manager:
+        class: AppBundle\Business\Manager\TournamentManager
+        arguments:
+            repository: "@tournament.repository"
+            fSerializer: "@f_serializer"
+
+    tournament.adapter:
+        class: AppBundle\Adapter\Tournament\TournamentAdapter
+        arguments:
+            - "@tournament.manager"
+        tags:
+            - { name: request.param_converter, converter:attribute priority: 10 }
